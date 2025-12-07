@@ -159,7 +159,7 @@ public:
     {
         pow = p;
     }
-    bool operator==(const monom &a)
+    bool operator==(const monom &a) const
     {
         if (pow == a.pow && coef == a.coef)
         {

@@ -195,7 +195,7 @@ public:
     friend ostream &operator<<(ostream &out, Tlist<monom> &l);
 };
 
-Tlist<monom> add(Tlist<monom> l, monom a)
+inline Tlist<monom> add(Tlist<monom> l, monom a)
 {
     if (l.pFirst == nullptr)
     {
@@ -272,7 +272,7 @@ Tlist<monom> add(Tlist<monom> l, monom a)
     return l;
 }
 
-ostream &operator<<(ostream &out, Tlist<monom> &l)
+inline ostream &operator<<(ostream &out, Tlist<monom> &l)
 {
     if (l.pFirst == nullptr)
     {

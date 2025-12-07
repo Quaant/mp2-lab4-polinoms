@@ -1,6 +1,5 @@
 #pragma once
 
-#include "monom.h"
 #include "list.h"
 using namespace std;
 

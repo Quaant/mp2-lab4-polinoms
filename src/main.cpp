@@ -7,7 +7,8 @@
 using namespace std;
 int main()
 {
-    // Tlist<monom>
+    // TLIST<MONOM>
+
     //  Tlist<monom> l;
     //  string s = "-2x5y3z4";
     //  monom a(s);
@@ -20,11 +21,25 @@ int main()
     //  l = add(l, a1);
     //  cout << l;
 
-    // polinom
-    string s = "-2x3y3z4 + 2";
+    // POLINOMS
+
+    string s = "4x4y3z4 + 3x3y2z2";
     polinom a(s);
-    string s1 = "4x3y3z4 + 3x4y2z2";
+    string s1 = "-2x5y3z4 + 13x2y3";
     polinom a1(s1);
-    polinom res = a * a1;
+    polinom res = a1 * a;
     cout << res;
+    // polinom res = a * a1;
+    // cout << res;
+
+    // OTHER TESTS
+
+    // Tlist<int> a;
+    // int a1 = 1;
+    // int a2 = 2;
+    // int a3 = 3;
+    // a.pushFront(a2);
+    // a.pushFront(a1);
+    // a.PushAfter(0, a3);
+    // cout << a[0];
 }
