@@ -67,6 +67,21 @@ TEST(polinom, operator_plus)
     EXPECT_EQ(res1.sizee(), 4);
     EXPECT_EQ(res2.sizee(), 2);
 }
+
+TEST(polinom, operator_plus1)
+
+{
+    string s = "4x4y3z4 + 3x8y2z2";
+    string s2 = "-4x4y3z4 - 3x8y2z2";
+    polinom a(s);
+    polinom a2(s2);
+    polinom res2 = a + a2;
+    cout << res2 << "\n";
+    polinom res3 = a2 + res2;
+    EXPECT_EQ(res2.sizee(), 0);
+    EXPECT_EQ(res3.sizee(), 2);
+}
+
 TEST(polinom, operator_mul)
 {
     string s = "4x4y3z4 + 3x3y2z2";

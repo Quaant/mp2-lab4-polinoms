@@ -154,6 +154,17 @@ public:
             throw out_of_range("Index out of range");
         return tmp->data;
     };
+    const T &operator[](size_t pos) const
+    {
+        TNode *tmp = pFirst;
+        for (size_t i = 0; i < pos && tmp != nullptr; i++)
+        {
+            tmp = tmp->pNext;
+        }
+        if (tmp == nullptr)
+            throw out_of_range("Index out of range");
+        return tmp->data;
+    };
 
     void PushAfter(size_t pos, const T &val)
     {

@@ -5,18 +5,30 @@ using namespace std;
 
 class polinom : private Tlist<monom>
 {
-private:
-    Tlist<monom> lst;
-
 public:
     using Tlist<monom>::operator=;
     polinom() : Tlist<monom>() {};
     polinom(const polinom &a) : Tlist<monom>(a) {};
     ~polinom() {};
-    polinom(const string &s)
+
+    // Явно объявляем методы доступа к базовому классу
+    using Tlist<monom>::sizee;
+
+    // Добавляем const версию operator[]
+    const monom &operator[](size_t index) const
+    {
+        return Tlist<monom>::operator[](index);
+    }
+
+    // Не-const версия operator[]
+    monom &operator[](size_t index)
+    {
+        return Tlist<monom>::operator[](index);
+    }
+
+    polinom(const string &s) : Tlist<monom>()
     {
         string str = s;
-
         str.erase(remove(str.begin(), str.end(), ' '), str.end());
 
         if (!str.empty() && str[0] != '+' && str[0] != '-')
@@ -53,71 +65,61 @@ public:
         if (m.getCoef() == 0)
             return;
 
-        *this = add(*this, m);
+        *this = ::add(*this, m);
     }
 
-    size_t sizee() const noexcept
+    polinom &operator=(const polinom &p)
     {
-        return Tlist<monom>::sizee();
-    }
-
-    using Tlist<monom>::operator[];
-
-    polinom &operator=(polinom &p)
-    {
-        static_cast<Tlist<monom> &>(*this) = static_cast<const Tlist<monom> &>(p);
+        Tlist<monom>::operator=(p);
         return *this;
     }
 
-    polinom operator+(polinom &p)
+    polinom operator+(const polinom &p) const
     {
         polinom res = *this;
         size_t sz_p = p.sizee();
         for (size_t i = 0; i < sz_p; i++)
         {
-            res = add(res, p[i]);
+            res = ::add(res, p[i]); // Теперь p[i] работает, так как есть const operator[]
         }
         return res;
     }
-    polinom operator-()
+
+    polinom operator-() const
     {
         polinom result;
         for (size_t i = 0; i < sizee(); i++)
         {
-            monom m = (*this)[i];
-            result = add(result, monom(-m.getCoef(), m.getPow()));
+            const monom &m = (*this)[i]; // Используем const версию
+            result = ::add(result, monom(-m.getCoef(), m.getPow()));
         }
         return result;
     }
-    polinom operator-(polinom &other)
+
+    polinom operator-(const polinom &other) const
     {
         polinom result = *this;
-
         for (size_t i = 0; i < other.sizee(); i++)
         {
-            monom m = other[i];
-            m.SetCoef(-m.getCoef());
-            result = ::add(result, m);
+            const monom &m = other[i]; // Используем const версию
+            monom neg_m(-m.getCoef(), m.getPow());
+            result = ::add(result, neg_m);
         }
-
         return result;
     }
-    polinom operator*(polinom other)
+
+    polinom operator*(const polinom &other) const
     {
         polinom result;
-
         for (size_t i = 0; i < sizee(); i++)
         {
             for (size_t j = 0; j < other.sizee(); j++)
             {
-                monom m1 = (*this)[i];
-                monom m2 = other[j];
-
+                const monom &m1 = (*this)[i];
+                const monom &m2 = other[j];
                 double newCoef = m1.getCoef() * m2.getCoef();
-
                 int pow1 = m1.getPow();
                 int pow2 = m2.getPow();
-
                 int x_pow = (pow1 / 100) + (pow2 / 100);
                 int y_pow = ((pow1 % 100) / 10) + ((pow2 % 100) / 10);
                 int z_pow = (pow1 % 10) + (pow2 % 10);
@@ -131,7 +133,6 @@ public:
                 result = ::add(result, monom(newCoef, newPow));
             }
         }
-
         return result;
     }
 
@@ -141,16 +142,42 @@ public:
         return *this;
     }
 
-    polinom operator+(double coef)
+    bool operator==(const polinom &other) const
     {
-        monom a(coef, 0);
-        addMonom(a);
-        return *this;
+        if (sizee() != other.sizee())
+        {
+            return false;
+        }
+        for (size_t i = 0; i < sizee(); i++)
+        {
+            if (!((*this)[i] == other[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    polinom operator+(double coef) const
+    {
+        polinom result = *this;
+        result.addMonom(monom(coef, 0));
+        return result;
     };
 
-    friend ostream &operator<<(ostream &out, polinom a)
+    friend ostream &operator<<(ostream &out, const polinom &a)
     {
-        out << static_cast<Tlist<monom> &>(a);
+        if (a.sizee() == 0)
+        {
+            out << "0";
+            return out;
+        }
+
+        for (size_t i = 0; i < a.sizee(); i++)
+        {
+            const monom &m = a[i]; // Используем const версию
+            out << m;
+        }
         return out;
     }
 };

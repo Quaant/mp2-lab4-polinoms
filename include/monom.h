@@ -131,11 +131,11 @@ public:
     {
         return (!(*this < a));
     };
-    double getCoef()
+    double getCoef() const
     {
         return coef;
     };
-    int getPow()
+    int getPow() const
     {
         return pow;
     };
@@ -211,9 +211,64 @@ public:
         in >> m.coef >> m.pow;
         return in;
     };
-    friend ostream &operator<<(ostream &out, monom &m)
+    friend ostream &operator<<(ostream &out, const monom &m)
     {
-        out << m.getCoef() << ' ' << m.getPow();
+        double coef = m.getCoef();
+        int pow = m.getPow();
+
+        // Коэффициент
+        if (coef == 1.0)
+        {
+            // Ничего не выводим для 1, кроме случаев, когда степень = 0
+            if (pow == 0)
+            {
+                out << "1";
+            }
+        }
+        else if (coef == -1.0)
+        {
+            // Только минус для -1, кроме случаев, когда степень = 0
+            if (pow == 0)
+            {
+                out << "-1";
+            }
+            else
+            {
+                out << "-";
+            }
+        }
+        else
+        {
+            out << coef;
+        }
+
+        // Степени переменных
+        if (pow > 0)
+        {
+            int x_pow = pow / 100;
+            int y_pow = (pow % 100) / 10;
+            int z_pow = pow % 10;
+
+            if (x_pow > 0)
+            {
+                out << "x";
+                if (x_pow > 1)
+                    out << "^" << x_pow;
+            }
+            if (y_pow > 0)
+            {
+                out << "y";
+                if (y_pow > 1)
+                    out << "^" << y_pow;
+            }
+            if (z_pow > 0)
+            {
+                out << "z";
+                if (z_pow > 1)
+                    out << "^" << z_pow;
+            }
+        }
+
         return out;
-    };
+    }
 };

@@ -42,4 +42,5 @@ int main()
     // a.pushFront(a1);
     // a.PushAfter(0, a3);
     // cout << a[0];
+    ya ebal lineva on huesos sorry for my toxic vibe because im student of unn in nizhniy novgorod fuck this 
 }
